@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"sort"
 )
 
 func Part2() {
@@ -29,26 +28,21 @@ func Part2() {
 		listB = append(listB, b)
 	}
 
-	sort.Ints(listA)
-	sort.Ints(listB)
+	counts := make(map[int]int)
 
-	var similarity, ai, bi int
+	for i := 0; i < len(listA); i++ {
+		counts[listA[i]] = 0
+	}
 
-outer:
-	for ; ai < len(listA); ai++ {
-		a := listA[ai]
-
-		for a >= listB[bi] {
-			if a == listB[bi] {
-				similarity += a
-			}
-
-			bi++
-
-			if bi >= len(listB) {
-				break outer
-			}
+	for i := 0; i < len(listB); i++ {
+		if _, ok := counts[listB[i]]; ok {
+			counts[listB[i]]++
 		}
+	}
+
+	similarity := 0
+	for a, b := range counts {
+		similarity += a * b
 	}
 
 	fmt.Printf("Part 2: %d\n", similarity)
